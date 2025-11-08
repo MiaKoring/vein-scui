@@ -1,9 +1,18 @@
 import SwiftCrossUI
 import BetterSync
+import Foundation
 
 @MainActor
 @propertyWrapper
-public class Query<M: PersistentModel>: @MainActor DynamicProperty {
+public class Query<M: PersistentModel>: @MainActor DynamicProperty, @MainActor ObservableProperty {
+    public var didChange: SwiftCrossUI.Publisher {
+        queryObserver.didChange
+    }
+    
+    public func tryRestoreFromSnapshot(_ snapshot: Data) {}
+    
+    public func snapshot() throws -> Data? { nil }
+    
     public func update(with environment: SwiftCrossUI.EnvironmentValues, previousValue: Query<M>?) {
         guard let context = environment[ContainerKey.self]?.context else {
             fatalError("Missing model container in environment")
@@ -12,7 +21,7 @@ public class Query<M: PersistentModel>: @MainActor DynamicProperty {
     }
     
     public typealias WrappedType = [M]
-    @State var queryObserver: QueryObserver<M>
+    var queryObserver: QueryObserver<M>
     var context: ManagedObjectContext?
     
     public var wrappedValue: [M] {
@@ -30,11 +39,15 @@ public class Query<M: PersistentModel>: @MainActor DynamicProperty {
     }
     
     public init(_ predicate: M._PredicateHelper = M._PredicateHelper()) {
-        self._queryObserver = State(wrappedValue: QueryObserver<M>(predicate._builder()))
+        self.queryObserver = QueryObserver<M>(predicate._builder())
     }
 }
 
-package final class QueryObserver<M: PersistentModel>: SwiftCrossUI.ObservableObject, @unchecked Sendable {
+package final class QueryObserver<M: PersistentModel>: @unchecked Sendable {
+    // MARK: - ViewUpdates
+    var didChange = Publisher()
+
+    // MARK: - Class Code
     typealias ModelType = M
     
     private var publishToEnclosingObserver: (() -> Void)?

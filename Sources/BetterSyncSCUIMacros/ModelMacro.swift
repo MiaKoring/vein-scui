@@ -91,7 +91,7 @@ public struct ModelMacro: MemberMacro, ExtensionMacro, PeerMacro {
         
         var eagerVarInit = eagerFields.map { key, value in
             let value = value.drop(while: { $0 == " " || $0 == ":" })
-            return "self.\(key) = try! \(value).decode(sqliteValue: fields[\"\(key)\"]!)"
+            return "self.\(key) = try! \(value).init(fromPersistent: \(value).PersistentRepresentation.decode(sqliteValue: fields[\"\(key)\"]!))\(value.hasSuffix("?") ? "": "!")"
         }.joined(separator: "\n        ")
         
         var fieldInformation = lazyFields.map { key, value in

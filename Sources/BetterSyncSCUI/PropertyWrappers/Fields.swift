@@ -3,8 +3,11 @@ import BetterSync
 import SwiftCrossUI
 
 @propertyWrapper
-public final class LazyField<T: Persistable>: PersistedField, @unchecked Sendable {
-   public typealias WrappedType = T?
+public final class LazyField<T: Persistable>: SCUIPersistedField, @unchecked Sendable, PublishedMarkerProtocol {
+    var upstreamLinkCancellable: SwiftCrossUI.Cancellable?
+    public let didChange = Publisher()
+    
+    public typealias WrappedType = T?
     
     private let lock = NSLock()
     private var store: WrappedType
@@ -78,16 +81,21 @@ public final class LazyField<T: Persistable>: PersistedField, @unchecked Sendabl
     public init(wrappedValue: T?) {
         self.key = nil
         self.store = wrappedValue
+        valueDidChange(publish: false)
     }
     
     public func setValue(to newValue: T?) {
         self.store = newValue
         model?.notifyOfChanges()
+        valueDidChange()
     }
 }
 
 @propertyWrapper
-public final class Field<T: Persistable>: PersistedField, @unchecked Sendable {
+public final class Field<T: Persistable>: SCUIPersistedField, @unchecked Sendable {
+    var upstreamLinkCancellable: SwiftCrossUI.Cancellable?
+    public let didChange = Publisher()
+    
     public typealias WrappedType = T
     
     public var key: String?
@@ -145,5 +153,6 @@ public final class Field<T: Persistable>: PersistedField, @unchecked Sendable {
     public func setValue(to newValue: T) {
         self.store = newValue
         model?.notifyOfChanges()
+        valueDidChange()
     }
 }
