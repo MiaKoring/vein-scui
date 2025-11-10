@@ -16,8 +16,6 @@ let package = Package(
     dependencies: [
         .package(url: "https://github.com/miakoring/BetterSync", branch: "main"),
         //.package(name: "BetterSync", path: "../BetterSync"),
-        .package(url: "https://github.com/stephencelis/SQLite.swift.git", from: "0.15.4"),
-        .package(url: "https://github.com/apple/swift-crypto.git", "1.0.0" ..< "5.0.0"),
         .package(url: "https://github.com/swiftlang/swift-syntax.git", "600.0.0" ..< "601.0.0"),
         .package(url: "https://github.com/miakoring/swift-cross-ui.git", branch: "usemylatestchanges"),
     ],

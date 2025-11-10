@@ -18,7 +18,11 @@ let package = Package(
             branch: "usemylatestchanges"
         ),
         .package(path: "../"),
-        .package(path: "../../BetterSync"),
+        //.package(path: "../../BetterSync"),
+	.package(
+	    url: "https://github.com/miakoring/BetterSync.git",
+	    branch: "main"
+	)
     ],
     targets: [
         .executableTarget(
