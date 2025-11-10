@@ -1,6 +1,15 @@
 {
-  "originHash" : "74388cf3d9705a8abca6e9404b384989deeaade09db13b47e816a38a2d567e40",
+  "originHash" : "e4e6475ebe5e57485179ca67697fb91cd0b460ef13f6e9f917dbae04fde06d3f",
   "pins" : [
+    {
+      "identity" : "bettersync",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/miakoring/BetterSync",
+      "state" : {
+        "branch" : "main",
+        "revision" : "5eecf7f1242ddf71d0f184c90d5417f0f8f674f1"
+      }
+    },
     {
       "identity" : "jpeg",
       "kind" : "remoteSourceControl",
@@ -31,10 +40,10 @@
     {
       "identity" : "sqlite.swift",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/stephencelis/SQLite.swift.git",
+      "location" : "https://github.com/miakoring/SQLite.swift.git",
       "state" : {
-        "revision" : "392dd6058624d9f6c5b4c769d165ddd8c7293394",
-        "version" : "0.15.4"
+        "branch" : "master",
+        "revision" : "2857e54ddc82e4bf294eea307ed348aaefca9811"
       }
     },
     {
@@ -113,8 +122,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/swiftlang/swift-toolchain-sqlite",
       "state" : {
-        "revision" : "b626d3002773b1a1304166643e7f118f724b2132",
-        "version" : "1.0.4"
+        "revision" : "b45b80b943e88db3cb8ddea798fa3fa9912375ff",
+        "version" : "1.0.7"
       }
     },
     {

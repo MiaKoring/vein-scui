@@ -93,9 +93,6 @@ struct TestModelDisplay: View {
                 }
             }
         }
-        .onAppear {
-            print("appeared \(item.id ?? -1)")
-        }
     }
 }
 

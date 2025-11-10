@@ -23,6 +23,7 @@ let package = Package(
         .target(
             name: "BetterSyncSCUI",
             dependencies: [
+                "BetterSyncSCUIMacros",
                 .byName(name: "BetterSync"),
                 .product(name: "SwiftCrossUI", package: "swift-cross-ui"),
             ]

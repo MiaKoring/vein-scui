@@ -1,6 +1,15 @@
 {
-  "originHash" : "2d49e2e2983ccc1d804127b7200c3090f1ed90d209fefdaa06a70c4c6978ad2f",
+  "originHash" : "d50a3e0f0e8f4af360eda5e7f1c99a2c6396e939fa779ec18efa98b6a807d1d9",
   "pins" : [
+    {
+      "identity" : "bettersync",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/miakoring/BetterSync",
+      "state" : {
+        "branch" : "main",
+        "revision" : "5eecf7f1242ddf71d0f184c90d5417f0f8f674f1"
+      }
+    },
     {
       "identity" : "jpeg",
       "kind" : "remoteSourceControl",
@@ -31,10 +40,10 @@
     {
       "identity" : "sqlite.swift",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/stephencelis/SQLite.swift.git",
+      "location" : "https://github.com/miakoring/SQLite.swift.git",
       "state" : {
-        "revision" : "392dd6058624d9f6c5b4c769d165ddd8c7293394",
-        "version" : "0.15.4"
+        "branch" : "master",
+        "revision" : "2857e54ddc82e4bf294eea307ed348aaefca9811"
       }
     },
     {
@@ -69,8 +78,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/apple/swift-crypto.git",
       "state" : {
-        "revision" : "bcd2b89f2a4446395830b82e4e192765edd71e18",
-        "version" : "4.0.0"
+        "revision" : "e8ed8867ec23bccf5f3bb9342148fa8deaff9b49",
+        "version" : "4.1.0"
       }
     },
     {
@@ -113,8 +122,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/swiftlang/swift-toolchain-sqlite",
       "state" : {
-        "revision" : "b626d3002773b1a1304166643e7f118f724b2132",
-        "version" : "1.0.4"
+        "revision" : "b45b80b943e88db3cb8ddea798fa3fa9912375ff",
+        "version" : "1.0.7"
       }
     },
     {

@@ -74,7 +74,6 @@ public struct ModelMacro: MemberMacro, ExtensionMacro, PeerMacro {
         
         var fieldBodys = [String]()
         var fieldAccessorBodies = [String]()
-        var constraintCheckBodies = [String]()
         
         fieldAccessorBodies.append("self._id")
         
@@ -89,17 +88,17 @@ public struct ModelMacro: MemberMacro, ExtensionMacro, PeerMacro {
         let fieldSetup = fieldBodys.joined(separator: "\n        ")
         let fieldAccessorSetup = fieldAccessorBodies.joined(separator: ",\n   ")
         
-        var eagerVarInit = eagerFields.map { key, value in
-            let value = value.drop(while: { $0 == " " || $0 == ":" })
+        let eagerVarInit = eagerFields.map { key, value in
+            let value = value.drop(while: { $0 == " " || $0 == ":" })
             return "self.\(key) = try! \(value).init(fromPersistent: \(value).PersistentRepresentation.decode(sqliteValue: fields[\"\(key)\"]!))\(value.hasSuffix("?") ? "": "!")"
         }.joined(separator: "\n        ")
         
         var fieldInformation = lazyFields.map { key, value in
-            let value = value.drop(while: { $0 == " " || $0 == ":" })
+            let value = value.drop(while: { $0 == " " || $0 == ":" })
             return "BetterSync.FieldInformation(\(value).sqliteTypeName, \"\(key)\", false)"
         }
         fieldInformation.append(contentsOf: eagerFields.map { key, value in
-            let value = value.drop(while: { $0 == " " || $0 == ":" })
+            let value = value.drop(while: { $0 == " " || $0 == ":" })
             return "BetterSync.FieldInformation(\(value).sqliteTypeName, \"\(key)\", true)"
         })
         
@@ -153,7 +152,7 @@ public struct ModelMacro: MemberMacro, ExtensionMacro, PeerMacro {
         conformingTo protocols: [SwiftSyntax.TypeSyntax],
         in context: some MacroExpansionContext
     ) throws -> [ExtensionDeclSyntax] {
-        guard let classDecl = declaration.as(ClassDeclSyntax.self) else {
+        guard let _ = declaration.as(ClassDeclSyntax.self) else {
             throw MacroError.onlyApplicableToClasses
         }
         
@@ -188,8 +187,8 @@ public struct ModelMacro: MemberMacro, ExtensionMacro, PeerMacro {
                     if let attrSyntax = attr.as(AttributeSyntax.self),
                        let name = attrSyntax.attributeName.as(IdentifierTypeSyntax.self) {
                         return
-                        name.name.text == "LazyField" ||
-                        name.name.text == "Field"
+                            name.name.text == "LazyField" ||
+                            name.name.text == "Field"
                     }
                     return false
                 }
