@@ -5,7 +5,7 @@ import PackageDescription
 import CompilerPluginSupport
 
 let package = Package(
-    name: "amethyst-vein-scui",
+    name: "vein-scui",
     platforms: [.macOS(.v13), .iOS(.v16), .tvOS(.v16), .macCatalyst(.v16), .visionOS(.v1)],
     products: [
         .library(
@@ -24,7 +24,7 @@ let package = Package(
             name: "VeinSCUI",
             dependencies: [
                 "VeinSCUIMacros",
-                .byName(name: "Vein"),
+                .product(name: "Vein", package: "vein"),
                 .product(name: "SwiftCrossUI", package: "swift-cross-ui"),
             ]
         ),
