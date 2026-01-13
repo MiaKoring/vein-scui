@@ -16,7 +16,7 @@ let package = Package(
     dependencies: [
         .package(url: "https://github.com/amethystsoft/vein", branch: "main"),
         //.package(name: "Vein", path: "../vein"),
-        .package(url: "https://github.com/swiftlang/swift-syntax.git", "600.0.0" ..< "601.0.0"),
+        .package(url: "https://github.com/swiftlang/swift-syntax.git", "600.0.0" ... "610.0.0"),
         .package(url: "https://github.com/stackotter/swift-cross-ui.git", branch: "main"),
     ],
     targets: [
