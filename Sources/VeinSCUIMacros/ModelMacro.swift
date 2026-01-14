@@ -117,12 +117,12 @@ public struct ModelMacro: MemberMacro, ExtensionMacro, PeerMacro {
     required init(id: Int64, fields: [String: Vein.SQLiteValue]) {
         self.id = id
         \(eagerVarInit)
-        setupFields()
+        _setupFields()
     }
 
     /// Sets required properties for @Field values.
     /// Gets generated automatically by @Model.
-    private func setupFields() {
+    public func _setupFields() {
         \(fieldSetup)
     }
 
