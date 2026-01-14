@@ -34,7 +34,6 @@ enum TestSchemaV0_0_1: VersionedSchema {
             self.flag = flag
             self.testEncryption = Encrypted(wrappedValue: testEncryption)
             self.randomValue = randomValue
-            setupFields()
         }
     }
     
