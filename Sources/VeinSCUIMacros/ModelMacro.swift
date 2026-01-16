@@ -107,6 +107,7 @@ public struct ModelMacro: MemberMacro, ExtensionMacro, PeerMacro {
         let body =
 """
     typealias _PredicateHelper = _\(className)PredicateHelper
+
     @PrimaryKey
     var id: Int64?
     
@@ -158,7 +159,10 @@ public struct ModelMacro: MemberMacro, ExtensionMacro, PeerMacro {
         
         let extensionDecl = try ExtensionDeclSyntax(
             """
-            extension \(raw: type): PersistentModel, @unchecked Sendable { }
+            extension \(raw: type): PersistentModel, @unchecked Sendable { 
+                static let schema = "\(raw: type)"
+                static var version: ModelVersion { \("\("\(type)".prefix(while: { $0 != "."})).version") }
+            }
             @MainActor
             extension \(raw: type): SwiftCrossUI.ObservableObject { }
             """

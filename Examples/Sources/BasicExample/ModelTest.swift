@@ -13,11 +13,7 @@ enum TestSchemaV0_0_1: VersionedSchema {
     ]
     
     @Model
-    final class Test: Identifiable {
-        typealias SchemaMigration = TestMigration
-        
-        static let schema = "test"
-        
+    final class Test: Identifiable {      
         @Field
         var flag: Bool
         
@@ -34,18 +30,6 @@ enum TestSchemaV0_0_1: VersionedSchema {
             self.flag = flag
             self.testEncryption = Encrypted(wrappedValue: testEncryption)
             self.randomValue = randomValue
-        }
-    }
-    
-    struct TestMigration: ModelSchemaMigration {
-        func prepare(in context: Vein.ManagedObjectContext) async throws {
-            try await context.createSchema(Test.schema)
-                .id()
-                .field("flag", type: .bool(required: true))
-                .field("selectedGroup", type: .string(required: false))
-                .field("testEncryption", type: .data(required: true))
-                .field("randomValue", type: .int(required: true))
-                .run()
         }
     }
 }

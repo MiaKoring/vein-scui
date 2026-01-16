@@ -18,8 +18,8 @@ let package = Package(
             branch: "main"
         ),
         .package(path: "../"),
-        //.package(path: "../../Vein"),
-        .package(url: "https://github.com/amethystsoft/vein", branch: "main"),
+        .package(path: "../../Vein"),
+        //.package(url: "https://github.com/amethystsoft/vein", branch: "main"),
     ],
     targets: [
         .executableTarget(

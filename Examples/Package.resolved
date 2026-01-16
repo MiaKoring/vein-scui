@@ -1,5 +1,5 @@
 {
-  "originHash" : "5c188c30fee27b42717323af86298d3ab9d3f61e951cf4efc38b3ba449d3f2cf",
+  "originHash" : "b3aec67b7c37ac80c45ca175911915e2df3e68c8f9a1ed90e9ab5dca3cc96f46",
   "pins" : [
     {
       "identity" : "jpeg",
@@ -164,15 +164,6 @@
       "location" : "https://github.com/stackotter/swift-winui",
       "state" : {
         "revision" : "1695ee3ea2b7a249f6504c7f1759e7ec7a38eb86"
-      }
-    },
-    {
-      "identity" : "vein",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/amethystsoft/vein",
-      "state" : {
-        "branch" : "main",
-        "revision" : "4dc830f3a652ad92431bbd73907ba793dc70dbb2"
       }
     },
     {

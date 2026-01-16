@@ -131,7 +131,7 @@ package final class QueryObserver<M: PersistentModel>: @unchecked Sendable {
     @MainActor
     package func remove(_ model: any PersistentModel) {
         guard let model = model as? ModelType else { return }
-        results?.removeAll(where: { $0.id! == model.id! })
+        results?.removeAll(where: { $0.id == model.id })
         publishToEnclosingObserver?()
         didChange.send()
     }
