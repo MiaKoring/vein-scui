@@ -31,6 +31,7 @@ let package = Package(
         .macro(
             name: "VeinSCUIMacros",
             dependencies: [
+                .product(name: "CommonVeinMacroLogic", package: "vein"),
                 .product(name: "SwiftSyntax", package: "swift-syntax"),
                 .product(name: "SwiftSyntaxMacros", package: "swift-syntax"),
                 .product(name: "SwiftCompilerPlugin", package: "swift-syntax"),
