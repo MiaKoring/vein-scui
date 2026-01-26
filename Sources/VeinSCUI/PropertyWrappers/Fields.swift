@@ -98,8 +98,8 @@ public final class LazyField<T: Persistable>: SCUIPersistedField, @unchecked Sen
     private func setAndNotify(_ newValue: WrappedType) {
         lock.withLock {
             store = newValue
-            model?.notifyOfChanges()
         }
+        model?.notifyOfChanges()
     }
     
     public func setStoreToCapturedState(_ state: Any) {
@@ -169,12 +169,11 @@ public final class Field<T: Persistable>: SCUIPersistedField, @unchecked Sendabl
         self.key = nil
     }
     
-    // only called from inside setter during lock
     private func setAndNotify(_ newValue: WrappedType) {
         lock.withLock {
             store = newValue
-            model?.notifyOfChanges()
         }
+        model?.notifyOfChanges()
     }
     
     public func setStoreToCapturedState(_ state: Any) {
