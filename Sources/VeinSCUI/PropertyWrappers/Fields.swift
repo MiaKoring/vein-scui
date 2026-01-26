@@ -3,7 +3,9 @@ import Vein
 import SwiftCrossUI
 
 @propertyWrapper
-public final class LazyField<T: Persistable>: SCUIPersistedField, @unchecked Sendable, PublishedMarkerProtocol {
+public final class LazyField<T: Persistable>: SCUIPersistedField, @unchecked Sendable, PublishedMarkerProtocol {    
+    public var wasTouched: Bool = false
+    
     var upstreamLinkCancellable: SwiftCrossUI.Cancellable?
     public let didChange = Publisher()
     
@@ -11,7 +13,7 @@ public final class LazyField<T: Persistable>: SCUIPersistedField, @unchecked Sen
     
     private let lock = NSLock()
     private var store: WrappedType
-    private var useStore: Bool = false
+    private var readFromStore = false
     
     /// ONLY LET MACRO SET
     public var key: String?
@@ -20,10 +22,6 @@ public final class LazyField<T: Persistable>: SCUIPersistedField, @unchecked Sen
     
     public var isLazy: Bool {
         true
-    }
-    
-    public static var sqliteTypeName: SQLiteTypeName {
-        T.sqliteTypeName
     }
     
     public var projectedValue: Binding<WrappedType> {
@@ -39,30 +37,40 @@ public final class LazyField<T: Persistable>: SCUIPersistedField, @unchecked Sen
     
     public var wrappedValue: WrappedType {
         get {
-            return lock.withLock {
-                if useStore {
+            return lock.withLock { () -> WrappedType in
+                if readFromStore {
                     return store
                 }
                 guard let context = model?.context else {
                     return store
                 }
                 do {
-                    let result = try context.fetchSingleProperty(field: self)
+                    let result = try context._fetchSingleProperty(field: self)
                     store = result
-                    useStore = true
+                    readFromStore = true
                     return result
+                } catch let error as ManagedObjectContextError {
+                    if case let .noSuchTable(_) = error {
+                        return nil
+                    }
+                    fatalError(error.localizedDescription)
                 } catch { fatalError(error.localizedDescription) }
             }
         }
         set {
-            if let context = model?.context {
-                context.updateDetached(field: self, newValue: newValue)
-            } else {
-                lock.withLock {
-                    useStore = true
-                    store = newValue
-                    model?.notifyOfChanges()
-                }
+            readFromStore = true
+            
+            guard
+                let model = model,
+                let context = model.context
+            else { return setAndNotify(newValue) }
+            
+            let predicateMatches = context._prepareForChange(of: model)
+            setAndNotify(newValue)
+            context._markTouched(model, previouslyMatching: predicateMatches)
+            
+            lock.withLock {
+                wasTouched = true
             }
         }
     }
@@ -81,10 +89,28 @@ public final class LazyField<T: Persistable>: SCUIPersistedField, @unchecked Sen
         valueDidChange(publish: false)
     }
     
+    private func setAndNotify(_ newValue: WrappedType) {
+        lock.withLock {
+            store = newValue
+            model?.notifyOfChanges()
+        }
+    }
+    
     public func setValue(to newValue: T?) {
         self.store = newValue
         model?.notifyOfChanges()
         valueDidChange()
+    }
+    
+    public func setStoreToCapturedState(_ state: Any) {
+        lock.withLock {
+            guard let value = state as? WrappedType else {
+                fatalError(ManagedObjectContextError.capturedStateApplicationFailed(WrappedType.self, instanceKey).localizedDescription)
+            }
+            self.store = value
+            self.readFromStore = false
+            self.wasTouched = false
+        }
     }
 }
 
@@ -98,15 +124,12 @@ public final class Field<T: Persistable>: SCUIPersistedField, @unchecked Sendabl
     public var key: String?
     public weak var model: (any PersistentModel)?
     private let lock = NSLock()
+    public var wasTouched: Bool = false
     
     package var store: T
     
     public var isLazy: Bool {
         false
-    }
-    
-    public static var sqliteTypeName: SQLiteTypeName {
-        T.sqliteTypeName
     }
     
     public var projectedValue: Binding<WrappedType> {
@@ -127,13 +150,16 @@ public final class Field<T: Persistable>: SCUIPersistedField, @unchecked Sendabl
             }
         }
         set {
-            if let context = model?.context {
-                context.updateDetached(field: self, newValue: newValue)
-            } else {
-                lock.withLock {
-                    store = newValue
-                    model?.notifyOfChanges()
-                }
+            guard
+                let model = model,
+                let context = model.context
+            else { return setAndNotify(newValue) }
+            
+            let predicateMatches = context._prepareForChange(of: model)
+            setAndNotify(newValue)
+            context._markTouched(model, previouslyMatching: predicateMatches)
+            lock.withLock {
+                self.wasTouched = true
             }
         }
     }
@@ -147,5 +173,23 @@ public final class Field<T: Persistable>: SCUIPersistedField, @unchecked Sendabl
         self.store = newValue
         model?.notifyOfChanges()
         valueDidChange()
+    }
+    
+    // only called from inside setter during lock
+    private func setAndNotify(_ newValue: WrappedType) {
+        lock.withLock {
+            store = newValue
+            model?.notifyOfChanges()
+        }
+    }
+    
+    public func setStoreToCapturedState(_ state: Any) {
+        lock.withLock {
+            guard let value = state as? WrappedType else {
+                fatalError(ManagedObjectContextError.capturedStateApplicationFailed(WrappedType.self, instanceKey).localizedDescription)
+            }
+            self.store = value
+            self.wasTouched = false
+        }
     }
 }

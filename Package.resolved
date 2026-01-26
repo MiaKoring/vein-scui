@@ -1,5 +1,5 @@
 {
-  "originHash" : "ba19afd0d6656d91c4009ea4fa3923def4f947acc57116d3db52582bb09906fb",
+  "originHash" : "ee33e4336363fd82755b0f37d02b054d22839b2ede244632daa4bc7cfb00f22a",
   "pins" : [
     {
       "identity" : "jpeg",
@@ -31,10 +31,10 @@
     {
       "identity" : "sqlite.swift",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/miakoring/SQLite.swift.git",
+      "location" : "https://github.com/amethystsoft/SQLite.swift.git",
       "state" : {
         "branch" : "master",
-        "revision" : "2857e54ddc82e4bf294eea307ed348aaefca9811"
+        "revision" : "b7efc89b94bab6a077ef2c56c64726cc57a61f38"
       }
     },
     {
@@ -47,21 +47,12 @@
       }
     },
     {
-      "identity" : "swift-collections",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/apple/swift-collections.git",
-      "state" : {
-        "revision" : "8c0c0a8b49e080e54e5e328cc552821ff07cd341",
-        "version" : "1.2.1"
-      }
-    },
-    {
       "identity" : "swift-cross-ui",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/stackotter/swift-cross-ui.git",
       "state" : {
         "branch" : "main",
-        "revision" : "d49bb7b25226aace84c5644304210b64e2114c0b"
+        "revision" : "d30b232d588d38f72ce66359d7c8dba4e361cc3d"
       }
     },
     {
@@ -104,8 +95,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/stackotter/swift-macro-toolkit",
       "state" : {
-        "revision" : "569627091e1fbb8745d691aeeb008e7247dedb7c",
-        "version" : "0.6.1"
+        "revision" : "d319bcc2586f7dbc6a09c05792105078263f1ed3",
+        "version" : "0.7.2"
       }
     },
     {
@@ -113,17 +104,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/swiftlang/swift-syntax.git",
       "state" : {
-        "revision" : "0687f71944021d616d34d922343dcef086855920",
-        "version" : "600.0.1"
-      }
-    },
-    {
-      "identity" : "swift-toolchain-sqlite",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/swiftlang/swift-toolchain-sqlite",
-      "state" : {
-        "revision" : "b45b80b943e88db3cb8ddea798fa3fa9912375ff",
-        "version" : "1.0.7"
+        "revision" : "f99ae8aa18f0cf0d53481901f88a0991dc3bd4a2",
+        "version" : "601.0.1"
       }
     },
     {
@@ -131,7 +113,7 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/stackotter/swift-uwp",
       "state" : {
-        "revision" : "e3ff9c195775e16b404b82cf6886c5e81d73b6c1"
+        "revision" : "8128f6615b7c5b46ada289ab6d49d871ca1e13a5"
       }
     },
     {
@@ -139,7 +121,7 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/stackotter/swift-webview2core",
       "state" : {
-        "revision" : "c9911ca23455b9fcdb2429e98baa6f4d003b381c"
+        "revision" : "4396f5d94d6dfd1f95ab25e79de98141b7f4f183"
       }
     },
     {
@@ -147,7 +129,7 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/stackotter/swift-windowsappsdk",
       "state" : {
-        "revision" : "ba6f0ec377b70d8be835d253102ff665a0e47d99"
+        "revision" : "f1c50892f10c0f7f635d3c7a3d728fd634ad001a"
       }
     },
     {
@@ -163,7 +145,25 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/stackotter/swift-winui",
       "state" : {
-        "revision" : "1695ee3ea2b7a249f6504c7f1759e7ec7a38eb86"
+        "revision" : "42c47f4e4129c8b5a5d9912f05e1168c924ac180"
+      }
+    },
+    {
+      "identity" : "ulid.swift",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/yaslab/ULID.swift",
+      "state" : {
+        "revision" : "e21933de8ac3e8ba9e83aa71956cd27206eec6b9",
+        "version" : "1.3.1"
+      }
+    },
+    {
+      "identity" : "vein",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/amethystsoft/vein",
+      "state" : {
+        "branch" : "main",
+        "revision" : "a1d8ef618ff2d754f6fc874ce10e58f2feea9085"
       }
     },
     {

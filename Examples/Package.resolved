@@ -1,5 +1,5 @@
 {
-  "originHash" : "b3aec67b7c37ac80c45ca175911915e2df3e68c8f9a1ed90e9ab5dca3cc96f46",
+  "originHash" : "a1ac80414959a8edcdb3a83f74465d6aa1e46108a0e7aa7b5607348bb30ec6db",
   "pins" : [
     {
       "identity" : "jpeg",
@@ -31,10 +31,10 @@
     {
       "identity" : "sqlite.swift",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/miakoring/SQLite.swift.git",
+      "location" : "https://github.com/amethystsoft/SQLite.swift.git",
       "state" : {
         "branch" : "master",
-        "revision" : "2857e54ddc82e4bf294eea307ed348aaefca9811"
+        "revision" : "b7efc89b94bab6a077ef2c56c64726cc57a61f38"
       }
     },
     {
@@ -118,15 +118,6 @@
       }
     },
     {
-      "identity" : "swift-toolchain-sqlite",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/swiftlang/swift-toolchain-sqlite",
-      "state" : {
-        "revision" : "b45b80b943e88db3cb8ddea798fa3fa9912375ff",
-        "version" : "1.0.7"
-      }
-    },
-    {
       "identity" : "swift-uwp",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/stackotter/swift-uwp",
@@ -164,6 +155,24 @@
       "location" : "https://github.com/stackotter/swift-winui",
       "state" : {
         "revision" : "1695ee3ea2b7a249f6504c7f1759e7ec7a38eb86"
+      }
+    },
+    {
+      "identity" : "ulid.swift",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/yaslab/ULID.swift",
+      "state" : {
+        "revision" : "e21933de8ac3e8ba9e83aa71956cd27206eec6b9",
+        "version" : "1.3.1"
+      }
+    },
+    {
+      "identity" : "vein",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/amethystsoft/vein",
+      "state" : {
+        "branch" : "main",
+        "revision" : "a1d8ef618ff2d754f6fc874ce10e58f2feea9085"
       }
     },
     {

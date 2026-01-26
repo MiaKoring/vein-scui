@@ -34,7 +34,7 @@ struct VeinTestEnvironmentApp: App {
             }
             
             self.modelContainer = try ModelContainer(
-                models: Test.self,
+                TestSchemaV0_0_1.self,
                 migration: TestMigration.self,
                 at: dbPath
             )
