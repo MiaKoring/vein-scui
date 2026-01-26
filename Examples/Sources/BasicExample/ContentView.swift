@@ -33,6 +33,9 @@ struct ContentView: View {
             Button("print managed instances") {
                 print(context.trackedObjectCount)
             }
+            Button("Save changes") {
+                try? context.save()
+            }
             Button("add one") {
                 do {
                     try context.insert(Test(flag: Int.random(in: 0...1) > 0, testEncryption: "\(Int.random(in: 0...1000))", randomValue: Int.random(in: 0...1000)))
