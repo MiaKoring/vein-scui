@@ -1,4 +1,4 @@
-// swift-tools-version: 5.10
+// swift-tools-version: 6.2
 
 import PackageDescription
 
@@ -18,8 +18,8 @@ let package = Package(
             branch: "main"
         ),
         .package(path: "../"),
-        .package(path: "../../Vein"),
-        //.package(url: "https://github.com/amethystsoft/vein", branch: "main"),
+        //.package(path: "../../Vein"),
+        .package(url: "https://github.com/amethystsoft/vein", branch: "main"),
     ],
     targets: [
         .executableTarget(

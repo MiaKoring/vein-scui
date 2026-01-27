@@ -4,6 +4,7 @@ import SwiftCrossUI
 
 @propertyWrapper
 public final class LazyField<T: Persistable>: SCUIPersistedField, @unchecked Sendable, PublishedMarkerProtocol {
+    
     var upstreamLinkCancellable: SwiftCrossUI.Cancellable?
     public let didChange = Publisher()
     
@@ -11,7 +12,21 @@ public final class LazyField<T: Persistable>: SCUIPersistedField, @unchecked Sen
     
     private let lock = NSLock()
     private var store: WrappedType
-    private var useStore: Bool = false
+    private var readFromStore = false
+    
+    private var _wasTouched: Bool = false
+    public private(set) var wasTouched: Bool {
+        get {
+            lock.withLock {
+                _wasTouched
+            }
+        }
+        set {
+            lock.withLock {
+                _wasTouched = newValue
+            }
+        }
+    }
     
     /// ONLY LET MACRO SET
     public var key: String?
@@ -20,10 +35,6 @@ public final class LazyField<T: Persistable>: SCUIPersistedField, @unchecked Sen
     
     public var isLazy: Bool {
         true
-    }
-    
-    public static var sqliteTypeName: SQLiteTypeName {
-        T.sqliteTypeName
     }
     
     public var projectedValue: Binding<WrappedType> {
@@ -39,31 +50,42 @@ public final class LazyField<T: Persistable>: SCUIPersistedField, @unchecked Sen
     
     public var wrappedValue: WrappedType {
         get {
-            return lock.withLock {
-                if useStore {
+            return lock.withLock { () -> WrappedType in
+                if readFromStore {
                     return store
                 }
                 guard let context = model?.context else {
                     return store
                 }
+                
                 do {
-                    let result = try context.fetchSingleProperty(field: self)
+                    let result = try context._fetchSingleProperty(field: self)
                     store = result
-                    useStore = true
+                    readFromStore = true
                     return result
+                } catch let error as ManagedObjectContextError {
+                    readFromStore = false
+                    if case .noSuchTable = error {
+                        return nil
+                    }
+                    if case .unexpectedlyEmptyResult = error {
+                        return store
+                    }
+                    fatalError(error.localizedDescription)
                 } catch { fatalError(error.localizedDescription) }
             }
         }
         set {
-            if let context = model?.context {
-                context.updateDetached(field: self, newValue: newValue)
-            } else {
-                lock.withLock {
-                    useStore = true
-                    store = newValue
-                    model?.notifyOfChanges()
-                }
-            }
+            guard
+                let model = model,
+                let context = model.context
+            else { return setAndNotify(newValue) }
+            
+            let predicateMatches = context._prepareForChange(of: model)
+            setAndNotify(newValue)
+            context._markTouched(model, previouslyMatching: predicateMatches)
+            
+            wasTouched = true
         }
     }
     
@@ -81,10 +103,23 @@ public final class LazyField<T: Persistable>: SCUIPersistedField, @unchecked Sen
         valueDidChange(publish: false)
     }
     
-    public func setValue(to newValue: T?) {
-        self.store = newValue
+    private func setAndNotify(_ newValue: WrappedType) {
+        lock.withLock {
+            store = newValue
+            readFromStore = true
+        }
         model?.notifyOfChanges()
-        valueDidChange()
+    }
+    
+    public func setStoreToCapturedState(_ state: Any) {
+        lock.withLock {
+            guard let value = state as? WrappedType else {
+                fatalError(ManagedObjectContextError.capturedStateApplicationFailed(WrappedType.self, instanceKey).localizedDescription)
+            }
+            self.store = value
+            self.readFromStore = false
+            self._wasTouched = false
+        }
     }
 }
 
@@ -98,15 +133,24 @@ public final class Field<T: Persistable>: SCUIPersistedField, @unchecked Sendabl
     public var key: String?
     public weak var model: (any PersistentModel)?
     private let lock = NSLock()
+    private var _wasTouched: Bool = false
+    public private(set) var wasTouched: Bool {
+        get {
+            lock.withLock {
+                _wasTouched
+            }
+        }
+        set {
+            lock.withLock {
+                _wasTouched = newValue
+            }
+        }
+    }
     
     package var store: T
     
     public var isLazy: Bool {
         false
-    }
-    
-    public static var sqliteTypeName: SQLiteTypeName {
-        T.sqliteTypeName
     }
     
     public var projectedValue: Binding<WrappedType> {
@@ -127,14 +171,15 @@ public final class Field<T: Persistable>: SCUIPersistedField, @unchecked Sendabl
             }
         }
         set {
-            if let context = model?.context {
-                context.updateDetached(field: self, newValue: newValue)
-            } else {
-                lock.withLock {
-                    store = newValue
-                    model?.notifyOfChanges()
-                }
-            }
+            guard
+                let model = model,
+                let context = model.context
+            else { return setAndNotify(newValue) }
+            
+            let predicateMatches = context._prepareForChange(of: model)
+            setAndNotify(newValue)
+            context._markTouched(model, previouslyMatching: predicateMatches)
+            self.wasTouched = true
         }
     }
     
@@ -143,9 +188,20 @@ public final class Field<T: Persistable>: SCUIPersistedField, @unchecked Sendabl
         self.key = nil
     }
     
-    public func setValue(to newValue: T) {
-        self.store = newValue
+    private func setAndNotify(_ newValue: WrappedType) {
+        lock.withLock {
+            store = newValue
+        }
         model?.notifyOfChanges()
-        valueDidChange()
+    }
+    
+    public func setStoreToCapturedState(_ state: Any) {
+        lock.withLock {
+            guard let value = state as? WrappedType else {
+                fatalError(ManagedObjectContextError.capturedStateApplicationFailed(WrappedType.self, instanceKey).localizedDescription)
+            }
+            self.store = value
+            self._wasTouched = false
+        }
     }
 }

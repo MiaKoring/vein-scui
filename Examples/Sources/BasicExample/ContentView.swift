@@ -20,22 +20,24 @@ struct ContentView: View {
             Button("generate") {
                 stop = false
                 Task {
-                    await context.updateAfterCompletion {
-                        for _ in 0...30 {
-                            if stop { return }
-                            do {
-                                try await context.insertInBackground(Test(flag: Int.random(in: 0...1) > 0, testEncryption: "\(Int.random(in: 0...1000))", randomValue: Int.random(in: 0...1000)))
-                            } catch {
-                                print(error.localizedDescription)
-                            }
+                    for _ in 0...30 {
+                        if stop { return }
+                        do {
+                            try context.insert(Test(flag: Int.random(in: 0...1) > 0, testEncryption: "\(Int.random(in: 0...1000))", randomValue: Int.random(in: 0...1000)))
+                        } catch {
+                            print(error.localizedDescription)
                         }
+                        await Task.yield()
                     }
                 }
             }
-            Button("printQuery") { print(testItems.map { $0.id! }) }
+            Button("printQuery") { print(testItems.map { $0.id }) }
             Button("Stop") { stop = true }
             Button("print managed instances") {
                 print(context.trackedObjectCount)
+            }
+            Button("Save changes") {
+                try? context.save()
             }
             Button("add one") {
                 do {
@@ -74,7 +76,6 @@ struct TestModelDisplay: View {
         VStack {
             HStack {
                 Toggle("", isOn: item.$flag)
-                Text("\(item.id ?? -1)")
                 Text(item.selectedGroup?.rawValue ?? "none")
                 Text(item.testEncryption.wrappedValue)
                 Text(item.randomValue.description)
