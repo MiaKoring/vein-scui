@@ -117,7 +117,7 @@ public final class LazyField<T: Persistable>: SCUIPersistedField, @unchecked Sen
             }
             self.store = value
             self.readFromStore = false
-            self.wasTouched = false
+            self._wasTouched = false
         }
     }
 }

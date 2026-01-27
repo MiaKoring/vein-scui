@@ -164,6 +164,7 @@ extension EnvironmentValues {
 public struct VeinContainer<Content: View>: View {
     @Environment(\.modelContainer) private var container
     @State private var isInitialized: Bool = false
+    @State var error: Error?
     private let content: () -> Content
     
     public init(@ViewBuilder content: @escaping () -> Content ) {
@@ -174,15 +175,32 @@ public struct VeinContainer<Content: View>: View {
         if let _ = container, isInitialized {
             content()
         } else if let container = container {
-            ProgressView()
-                .onAppear {
-                    do {
-                        try container.migrate()
-                    } catch {
-                        print(error.localizedDescription)
-                    }
-                    isInitialized = true
+            if let error = error as? LocalizedError {
+                Text("An error occured while migrating database:").font(.title3)
+                if let errorDescription = error.errorDescription {
+                    Text(errorDescription).foregroundColor(.red)
                 }
+                if let failureReason = error.failureReason {
+                    Text(failureReason).foregroundColor(.gray)
+                }
+                if let recoverySuggestion = error.recoverySuggestion {
+                    Text(recoverySuggestion).foregroundColor(.gray)
+                }
+            } else if let error {#
+                Text("An error occured while migrating database:").font(.title3)
+                Text(error.localizedDescription).foregroundColor(.red)
+            } else {
+                ProgressView()
+                    .onAppear {
+                        do {
+                            try container.migrate()
+                            isInitialized = true
+                        } catch {
+                            self.error = error
+                            print(error.localizedDescription)
+                        }
+                    }
+            }
         } else {
             ProgressView()
         }
