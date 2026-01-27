@@ -64,6 +64,7 @@ public final class LazyField<T: Persistable>: SCUIPersistedField, @unchecked Sen
                     readFromStore = true
                     return result
                 } catch let error as ManagedObjectContextError {
+                    readFromStore = false
                     if case .noSuchTable = error {
                         return nil
                     }
